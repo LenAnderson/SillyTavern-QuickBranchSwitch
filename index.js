@@ -57,21 +57,16 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
 		console.log('[QBS]', {branchPoints});
 		let jumpEl;
 		branchPoints.forEach(bp=>{
+			bp.childElement = [];
 			const mes = chat.findIndex(it=>it.mes.replace(/\r\n/g, '\n')==bp.msg);
 			const next = chat[mes+1];
+			const currentIndex = bp.children.findIndex(c=>c.msg == next?.mes?.replace(/\r\n/g, '\n'));
 			const el = document.querySelector(`#chat .mes[mesid="${mes}"]`);
+			let carousel;
 			if (el) {
 				const container = document.createElement('div'); {
 					container.classList.add('qbs--branchPoint');
-					const header = document.createElement('div'); {
-						header.classList.add('qbs--header');
-						header.textContent = 'BRANCH';
-						header.addEventListener('click', ()=>{
-							carousel.classList.toggle('qbs--active');
-						});
-						container.append(header);
-					}
-					const carousel = document.createElement('div'); {
+					carousel = document.createElement('div'); {
 						carousel.classList.add('qbs--carousel');
 						if (jumpMessage && jumpMessage == bp.msg) {
 							carousel.classList.add('qbs--active');
@@ -79,8 +74,9 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
 							jumpEl = el;
 						}
 						
-						bp.children.forEach(c=>{
+						bp.children.forEach((c,idx)=>{
 							const child = document.createElement('div'); {
+								bp.childElement[idx] = child;
 								child.classList.add('qbs--child');
 								if (c.msg == next?.mes?.replace(/\r\n/g, '\n')) {
 									child.classList.add('qbs--current');
@@ -110,6 +106,44 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
 						container.append(carousel);
 					}
 					el.insertAdjacentElement('afterend', container);
+				}
+				const prevTrigger = document.createElement('span'); {
+					prevTrigger.classList.add('qbs--prev');
+					prevTrigger.textContent = '⟨';
+					if (currentIndex > 0) {
+						prevTrigger.title = `Switch to previous branch\n\n${bp.children[currentIndex-1]?.msg??''}`;
+						prevTrigger.addEventListener('click', ()=>{
+							bp.childElement[currentIndex-1].click();
+						});
+					} else {
+						prevTrigger.title = 'Already on first branch';
+					}
+					el.querySelector('.name_text').insertAdjacentElement('afterend', prevTrigger);
+				}
+				const trigger = document.createElement('span'); {
+					trigger.classList.add('qbs--trigger');
+					trigger.classList.add('fa-regular');
+					trigger.classList.add('fa-code-branch');
+					trigger.title = 'Show / hide branches';
+					trigger.addEventListener('click', ()=>{
+						carousel.classList.toggle('qbs--active');
+					});
+					prevTrigger.insertAdjacentElement('afterend', trigger);
+				}
+				const nextTrigger = document.createElement('span'); {
+					nextTrigger.classList.add('qbs--next');
+					nextTrigger.textContent = '⟩';
+					if (currentIndex < bp.children.length-1) {
+						nextTrigger.title = `Switch to next branch\n\n${bp.children[currentIndex+1]?.msg??''}`;
+						nextTrigger.addEventListener('click', ()=>{
+							if (currentIndex < bp.children.length-1) {
+								bp.childElement[currentIndex+1].click();
+							}
+						});
+					} else {
+						nextTrigger.title = 'Already on last branch';
+					}
+					trigger.insertAdjacentElement('afterend', nextTrigger);
 				}
 			}
 		});
