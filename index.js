@@ -13,6 +13,7 @@ const debounce = (func, delay=100)=>{
 
 
 let jumpMessage;
+let cache;
 
 
 
@@ -21,20 +22,24 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
 	console.log('[QBS]', 'CHAT_CHANGED', chatFile);
 	const context = getContext();
 	let data = {};
-	let tree;
-	let isGroup = false;
-	if (context.characterId) {
-		data = await fetchData(context.characters[context.characterId].avatar);
-		console.log('[QBS]', {data});
-		tree = await prepareData(data, false);
-	} else {
-		const group = context.groups.find(it=>it.id==context.groupId);
-		for(let i = 0; i < group.chats.length; i++){
-			console.log(group.chats[i]);
-			data[i] = { 'file_name': group.chats[i] };
+	let tree = cache ?? null;
+	let isGroup = !context.characterId;
+	if (!tree) {
+		if (context.characterId) {
+			data = await fetchData(context.characters[context.characterId].avatar);
+			console.log('[QBS]', {data});
+			tree = await prepareData(data, false);
+		} else {
+			const group = context.groups.find(it=>it.id==context.groupId);
+			for(let i = 0; i < group.chats.length; i++){
+				console.log(group.chats[i]);
+				data[i] = { 'file_name': group.chats[i] };
+			}
+			isGroup = true;
+			tree = await prepareData(data, true);
 		}
-		isGroup = true;
-		tree = await prepareData(data, true);
+	} else {
+		cache = null;
 	}
 	if (tree) {
 		console.log('[QBS]', {tree});
@@ -84,6 +89,7 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
 								child.addEventListener('click', ()=>{
 									console.log('[QBS]', c);
 									jumpMessage = bp.msg;
+									cache = tree;
 									if (isGroup) {
 										openGroupChat(context.groupId, c.file_name.replace('.jsonl',''));
 									} else {
