@@ -1,0 +1,53 @@
+.qbs--branchPoint {
+	::-webkit-scrollbar {
+		height: 10px;
+	}
+	::-webkit-scrollbar-thumb {
+		border-top: 2px solid transparent;
+	}
+
+	> .qbs--header {
+		background-color: rgb(80 80 80);
+		cursor: pointer;
+		text-align: center;
+		opacity: 0.75;
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	> .qbs--carousel {
+		display: none;
+		flex: 0 0 100px;
+		gap: 1em;
+		justify-Content: flex-start;
+		overflow-x: auto;
+		&.qbs--active {
+			display: flex;
+		}
+
+		> .qbs--child {
+			flex: 0 0 30%;
+			cursor: pointer;
+			width: 30%;
+			border: 2px solid rgb(80 80 80);
+			font-size: smaller;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
+			&.qbs--current {
+				border-color: blue;
+			}
+
+			> .qbs--header {
+				font-style: italic;
+				border-bottom: 1px solid rgb(80 80 80);
+			}
+			> .qbs--body {
+				height: 100px;
+				overflow-y: auto;
+			}
+		}
+	}
+}

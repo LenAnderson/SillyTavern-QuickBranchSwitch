@@ -1,0 +1,47 @@
+.qbs--branchPoint ::-webkit-scrollbar {
+  height: 10px;
+}
+.qbs--branchPoint ::-webkit-scrollbar-thumb {
+  border-top: 2px solid transparent;
+}
+.qbs--branchPoint > .qbs--header {
+  background-color: #505050;
+  cursor: pointer;
+  text-align: center;
+  opacity: 0.75;
+}
+.qbs--branchPoint > .qbs--header:hover {
+  opacity: 1;
+}
+.qbs--branchPoint > .qbs--carousel {
+  display: none;
+  flex: 0 0 100px;
+  gap: 1em;
+  justify-Content: flex-start;
+  overflow-x: auto;
+}
+.qbs--branchPoint > .qbs--carousel.qbs--active {
+  display: flex;
+}
+.qbs--branchPoint > .qbs--carousel > .qbs--child {
+  flex: 0 0 30%;
+  cursor: pointer;
+  width: 30%;
+  border: 2px solid #505050;
+  font-size: smaller;
+  opacity: 0.5;
+}
+.qbs--branchPoint > .qbs--carousel > .qbs--child:hover {
+  opacity: 1;
+}
+.qbs--branchPoint > .qbs--carousel > .qbs--child.qbs--current {
+  border-color: blue;
+}
+.qbs--branchPoint > .qbs--carousel > .qbs--child > .qbs--header {
+  font-style: italic;
+  border-bottom: 1px solid #505050;
+}
+.qbs--branchPoint > .qbs--carousel > .qbs--child > .qbs--body {
+  height: 100px;
+  overflow-y: auto;
+}
