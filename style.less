@@ -1,3 +1,22 @@
+@keyframes qbs--flash {
+	0% {
+		filter: invert(0);
+	}
+	50% {
+		filter: invert(1);
+	}
+	100% {
+		filter: invert(0);
+	}
+}
+
+.qbs--flash {
+	animation-name: flash;
+	animation-duration: 1000ms;
+	animation-timing-function: linear;
+	animation-delay: 0s;
+	animation-iteration-count: 2;
+}
 .qbs--trigger {
 	display: inline-block;
 	cursor: pointer;
