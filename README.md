@@ -2,6 +2,8 @@
 
 Quickly switch between branches of a conversation.
 
+![qbs](README/qbs.png)
+
 
 
 
@@ -14,7 +16,7 @@ Quickly switch between branches of a conversation.
 
 ## Installation
 
-Use ST's inbuilt extension installer with this URL:  
+Use ST's inbuilt extension installer with this URL:
 https://github.com/LenAnderson/SillyTavern-QuickBranchSwitch/
 
 
