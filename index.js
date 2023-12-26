@@ -159,6 +159,7 @@ getContext().eventSource.on(getContext().event_types.CHAT_CHANGED, async(chatFil
             }
         });
         if (jumpEl) {
+            await delay(1000);
             jumpEl.scrollIntoView();
         }
     } else {
